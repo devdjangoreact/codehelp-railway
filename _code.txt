@@ -1,0 +1,127 @@
+solution
+
+sql - https://railway.app/project/23e3dbb2-1ca5-4454-ac47-f8c85038f14d/plugin/8f300899-9310-4f26-be7a-b1529d963ca1
+
+python manage.py migrate
+python manage.py makemigrations
+
+python manage.py createsuperuser
+python manage.py runserver 192.168.17.131:8000
+pip install -r requirements.txt
+python3 manage.py collectstatic
+
+
+docker-compose -f docker-compose.staging.yml up -d --build
+
+docker-compose -f docker-compose.prod.yml up -d --build
+
+
+sudo chmod 666 /var/run/docker.sock && sudo dockerd 
+
+docker-compose build
+docker-compose up -d --build
+docker-compose down -v
+
+docker-compose exec web python manage.py migrate --noinput
+
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
+
+docker-compose exec web python manage.py flush
+docker-compose exec web python manage.py loaddata movies.json
+
+docker compose exec web python manage.py collectstatic
+
+>>pytest
+
+docker-compose exec solution pytest
+docker-compose exec solution pytest -p no:warnings -k "unit" -n auto
+
+
+http --json POST http://localhost:8009/api/movies/ title=Fargo genre=comedy year=1996
+http --json http://localhost:8009/api/movies/1/
+
+
+>>>>>>>>>>>>>>> Pytest Commands <<<<<<<<<<<<<<<<<<
+Before moving on, let's review some useful pytest commands:
+
+# normal run
+$ docker-compose exec movies pytest
+
+# disable warnings
+$ docker-compose exec movies pytest -p no:warnings
+
+# run only the last failed tests
+$ docker-compose exec movies pytest --lf
+
+# run only the tests with names that match the string expression
+$ docker-compose exec movies pytest -k "movie and not all_movies"
+
+# stop the test session after the first failure
+$ docker-compose exec movies pytest -x
+
+# enter PDB after first failure then end the test session
+$ docker-compose exec movies pytest -x --pdb
+
+# stop the test run after two failures
+$ docker-compose exec movies pytest --maxfail=2
+
+# show local variables in tracebacks
+$ docker-compose exec movies pytest -l
+
+# list the 2 slowest tests
+$ docker-compose exec movies pytest --durations=2
+
+>>>>>heroku
+
+Creating app... done, ⬢ evening-tor-58624
+https://evening-tor-58624.herokuapp.com/ | https://git.heroku.com/evening-tor-58624.gitt
+
+
+heroku create
+heroku container:login
+heroku addons:create heroku-postgresql:hobby-dev --app evening-tor-58624
+
+>>>>
+docker build -f Dockerfile.prod -t registry.heroku.com/evening-tor-58624/web .
+docker push registry.heroku.com/evening-tor-58624/web:latest
+
+heroku container:release web --app evening-tor-58624
+heroku run python manage.py migrate --app evening-tor-58624
+heroku run python manage.py loaddata movies.json --app evening-tor-58624
+heroku run python manage.py createsuperuser --app evening-tor-58624
+
+>>>>>>>>>>>>>>>>>>>>>>>>Code Coverage and Quality
+docker-compose exec solution pytest -p no:warnings --cov=.
+docker-compose exec solution pytest -p no:warnings --cov=. --cov-report html
+
+docker-compose exec solution isort . --diff
+docker-compose exec solution black --check --exclude=migrations .
+docker-compose exec solution isort . --check-only
+
+docker-compose exec solution flake8 .
+docker-compose exec solution black --exclude=migrations .
+docker-compose exec solution isort .
+
+isort . --diff
+black --check --exclude=migrations .
+isort . --check-only --profile black
+flake8 .
+
+Use heroku authorizations:create to generate a long-term token
+0efd15e0-5290-4773-a2ec-78c8525f300c
+
+>>>>>>gitlab
+docker build -t registry.gitlab.com/devdjangoreact/solution .
+docker push registry.gitlab.com/devdjangoreact/solution
+
+
+>>>>>>>>>>SCRYPT UBUNTU WL2
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+source ~/.bashrc
+nvm install v16.17.1
+
+
+cd .. && git add . && git commit -m  " + datetime.now().strftim + " && git push

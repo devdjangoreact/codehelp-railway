@@ -1,0 +1,63 @@
+
+ssh -i "C:\Users\dev_home\Desktop\vps\solution.pem" ubuntu@ec2-3-83-161-23.compute-1.amazonaws.com
+ ssh -i "solution.pem" ubuntu@ec2-3-83-161-23.compute-1.amazonaws.com
+
+sudo apt update
+sudo apt-get install python3-pip
+sudo pip3 install gunicorn
+sudo apt-get install supervisor
+sudo apt-get install nginx
+sudo pip3 install django
+django-admin startproject core
+
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+python3 manage.py makemigrations - table["user_profile"]
+
+python3 manage.py collectstatic
+python3 manage.py createsuperuser
+python3 manage.py runserver
+python3 manage.py startapp user_profile
+
+python3 -m venv venv
+source venv/bin/activate
+
+pip3 install -r requirements.txt
+
+DJANGO START AMAZON  0.0.0.0:8000 
+
+python3 -m pyxtermjs
+
+docker exec django-on-docker-letsencrypt-db-1 pg_dump -Fc -U hello_django -d hello_django_dev > ./dump
+
+docker compose -f docker-compose.local.yml python3 manage.py dbbackup
+
+docker compose exec web python3 manage.py dbrestore
+
+
+docker compose up -d --build
+
+docker compose -f docker-compose.prod.yml up -d --build
+
+docker network create -d bridge --internal --attachable net_dev
+docker network create -d bridge back_net_dev
+
+
+docker run -d \
+  --name django-on-docker-letsencrypt-db-1 \
+  -e POSTGRES_USER=hello_django \
+  -e POSTGRES_PASSWORD=hello_django \
+  -e POSTGRES_DB=hello_django_dev \
+  postgres:15.0-alpine
+
+docker exec -it django-on-docker-letsencrypt-db-1 psql -U hello_django -d hello_django_dev
+
+
+createdb -h localhost -p 5432 -U hello_django hello_django_dev
+createuser hello_django
+createdb hello_django_dev
+
+psql -h localhost -p 5432 -U hello_django -d hello_django_dev
+
+sudo -u postgres psql -c 'hello_django_dev;'
