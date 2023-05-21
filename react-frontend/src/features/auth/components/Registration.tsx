@@ -1,7 +1,7 @@
-import React, { FC, useEffect, FormEvent } from "react";
+import React, { FC, useEffect, FormEvent, useState } from "react";
 import { Navigate, Link, useNavigate } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 
 import { Input, Message, Loader } from "../../../components";
 import useInput from "../../../hooks/input/use-input";
@@ -20,7 +20,7 @@ const Registration: FC = () => {
     text: username,
     shouldDisplayError: nameHasError,
     textChangeHandler: nameChangeHandler,
-    inputBlurHandler: nameBlurHandler,
+
     clearHandler: nameClearHandler,
   } = useInput(validateNameLength);
 
@@ -28,7 +28,7 @@ const Registration: FC = () => {
     text: email,
     shouldDisplayError: emailHasError,
     textChangeHandler: emailChangeHandler,
-    inputBlurHandler: emailBlurHandler,
+
     clearHandler: emailClearHandler,
   } = useInput(validateEmail);
 
@@ -36,7 +36,7 @@ const Registration: FC = () => {
     text: password,
     shouldDisplayError: passwordHasError,
     textChangeHandler: passwordChangeHandler,
-    inputBlurHandler: passwordBlurHandler,
+
     clearHandler: passwordClearHandler,
   } = useInput(validatePasswordLength);
 
@@ -44,7 +44,7 @@ const Registration: FC = () => {
     text: re_password,
     shouldDisplayError: confirmPasswordHasError,
     textChangeHandler: confirmPasswordChangeHandler,
-    inputBlurHandler: confirmPasswordBlurHandler,
+
     clearHandler: confirmPasswordClearHandler,
   } = useInput(validatePasswordLength);
 
@@ -57,9 +57,11 @@ const Registration: FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const { isError, isLoading, isSuccess, isAuthenticated } = useAppSelector(
+  const { isLoading, isAuthenticated, message, isError } = useAppSelector(
     (state) => state.auth
   );
+
+  const { auth } = useAppSelector((state) => state);
 
   const navigate = useNavigate();
 
@@ -69,12 +71,10 @@ const Registration: FC = () => {
       clearForm();
       navigate("/");
     }
-  }, [isSuccess, isAuthenticated, dispatch]);
+  }, [isAuthenticated, dispatch]);
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (password !== re_password) return;
 
     if (
       nameHasError ||
@@ -102,6 +102,8 @@ const Registration: FC = () => {
     dispatch(register(newUser));
   };
 
+  console.log(auth);
+
   return (
     <form
       className="h-screen flex flex-col justify-center items-center  bg-blue-50"
@@ -112,8 +114,8 @@ const Registration: FC = () => {
         className="flex flex-col justify-center items-center border-4 
        bg-orange-50 border-amber-300 py-16 p-4 mb-40 rounded-lg"
       >
-        {/* {message && <Message />} */}
-        {isError && <Message />}
+        {message && <Message message={message} status={isError} />}
+
         {isLoading && <Loader />}
         <span className="text-4xl m-2">Register</span>
         <Input

@@ -10,46 +10,99 @@ import { Jwt } from "../models/Jwt";
 import { LoginUser } from "../models/LoginUser.interface";
 import { NewUser } from "../models/NewUser";
 
-// const register = async (newUser: NewUser): Promise<{ jwt: Jwt; DisplayUser | null}> => {
-
 const register = async (
   newUser: NewUser
-): Promise<{ jwt: Jwt; user: DisplayUser | null; payload: string }> => {
+): Promise<{
+  jwt: Jwt | null;
+  user: DisplayUser | null;
+  message: string;
+  status: string;
+}> => {
   const response = await axios.post(
     `${process.env.REACT_APP_BASE_API}/auth/register`,
     newUser
   );
-
+  console.log(response.data);
   if (response.data) {
-    localStorage.setItem("jwt", JSON.stringify({ token: response.data.token }));
+    if (response.data.status === "error") {
+      return {
+        jwt: null,
+        user: null,
+        message: response.data.message,
+        status: response.data.status,
+      };
+    } else {
+      localStorage.setItem(
+        "jwt",
+        JSON.stringify({ token: response.data.user.accessToken })
+      );
 
-    const decodedJwt: DecodedJwt = jwt_decode(response.data.token);
+      const decodedJwt: DecodedJwt = jwt_decode(response.data.user.accessToken);
 
-    localStorage.setItem("user", JSON.stringify(response.data.user));
-
-    return { jwt: response.data, user: decodedJwt.user, payload: "" };
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      console.log(response.data.user);
+      return {
+        jwt: response.data,
+        user: decodedJwt.user,
+        message: "",
+        status: response.data.status,
+      };
+    }
   }
-  return { jwt: response.data, user: null, payload: response.data };
+  return {
+    jwt: response.data,
+    user: null,
+    message: response.statusText,
+    status: "error",
+  };
 };
 
 const login = async (
   user: LoginUser
-): Promise<{ jwt: Jwt; user: DisplayUser | null }> => {
+): Promise<{
+  jwt: Jwt;
+  user: DisplayUser | null;
+  message: string;
+  status: string;
+}> => {
   const response = await axios.post(
     `${process.env.REACT_APP_BASE_API}/auth/login`,
     user
   );
 
   if (response.data) {
-    localStorage.setItem("jwt", JSON.stringify({ token: response.data.token }));
+    if (response.data.status === "error") {
+      return {
+        jwt: null,
+        user: null,
+        message: response.data.message,
+        status: response.data.status,
+      };
+    } else {
+      localStorage.setItem(
+        "jwt",
+        JSON.stringify({ token: response.data.token })
+      );
 
-    const decodedJwt: DecodedJwt = jwt_decode(response.data.token);
+      const decodedJwt: DecodedJwt = jwt_decode(response.data.token);
 
-    localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("user", JSON.stringify(response.data.user));
 
-    return { jwt: response.data, user: decodedJwt.user };
+      return {
+        jwt: response.data,
+        user: decodedJwt.user,
+        message: response.data.message,
+        status: response.data.status,
+      };
+    }
   }
-  return { jwt: response.data, user: null };
+  console.log(response.statusText);
+  return {
+    jwt: response.data,
+    user: null,
+    message: response.statusText,
+    status: "error",
+  };
 };
 
 const logout = (): void => {

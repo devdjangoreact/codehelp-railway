@@ -25,7 +25,7 @@ interface AuthState extends AsyncState {
   user?: DisplayUser | null;
   jwt?: Jwt;
   isAuthenticated?: boolean;
-  payload: string;
+  message: string;
 }
 
 const initialState: AuthState = {
@@ -35,7 +35,7 @@ const initialState: AuthState = {
   isLoading: false,
   isSuccess: false,
   isError: false,
-  payload: "",
+  message: "",
 };
 
 const config = {
@@ -91,7 +91,7 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = false;
-      state.payload = "";
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
@@ -99,14 +99,21 @@ export const authSlice = createSlice({
       // REGISTER
       .addCase(register.pending, (state) => {
         state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.message = "";
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
-        state.isAuthenticated = true;
+        state.isSuccess = action.payload.status === "success" ? true : false;
+        state.isError = action.payload.status === "success" ? false : true;
+        state.isAuthenticated =
+          action.payload.status === "success" ? true : false;
         state.user = action.payload.user;
         state.jwt = action.payload.jwt;
-        // state.payload = action.payload;
+        state.message = action.payload.message;
       })
       .addCase(register.rejected, (state) => {
         state.isLoading = false;
@@ -114,6 +121,7 @@ export const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
         state.user = null;
+        state.message = "";
       })
       // LOGIN
       .addCase(login.pending, (state) => {

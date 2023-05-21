@@ -47,6 +47,7 @@ const Router = () => {
       path: "/register",
       children: [{ path: "/register", element: <Registration /> }],
     },
+
     {
       path: "/",
       element: <Layout />,
@@ -55,6 +56,7 @@ const Router = () => {
         {
           path: "/",
           errorElement: <ErrorPage />,
+          element: <PrivateRoute />,
           children: [
             { index: true, element: <PrivateRoute page={<DashBoard />} /> },
             { path: "dashboard", element: <DashBoard /> },
@@ -98,11 +100,6 @@ const Router = () => {
       ],
     },
 
-    // {
-    //   path: "*",
-    //   element: <Layout />,
-    //   children: [{ path: "*", element: <Error /> }],
-    // },
     // ...allRoutes,
   ]);
 

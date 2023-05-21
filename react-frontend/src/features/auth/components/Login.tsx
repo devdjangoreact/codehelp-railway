@@ -17,7 +17,7 @@ const Login = () => {
     text: username,
     shouldDisplayError: emailHasError,
     textChangeHandler: emailChangeHandler,
-    inputBlurHandler: emailBlurHandler,
+
     clearHandler: emailClearHandler,
   } = useInput(validateEmail);
 
@@ -25,7 +25,7 @@ const Login = () => {
     text: password,
     shouldDisplayError: passwordHasError,
     textChangeHandler: passwordChangeHandler,
-    inputBlurHandler: passwordBlurHandler,
+
     clearHandler: passwordClearHandler,
   } = useInput(validatePasswordLength);
 
@@ -36,23 +36,25 @@ const Login = () => {
 
   const dispatch = useAppDispatch();
 
-  const { isError, isLoading, isSuccess, isAuthenticated } = useAppSelector(
+  const { isError, isLoading, isAuthenticated, message } = useAppSelector(
     (state) => state.auth
   );
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isAuthenticated) {
       dispatch(reset());
       clearForm();
     }
-  }, [isSuccess, dispatch]);
+  }, [isAuthenticated, dispatch]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
     navigate("/");
   }, [isAuthenticated]);
+
+  console.log("isAuthenticated", isAuthenticated);
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +78,7 @@ const Login = () => {
         className="flex flex-col justify-center items-center border-4
        border-amber-300 py-20 p-8 mb-40 rounded-lg bg-orange-50"
       >
-        {isError && <Message />}
+        {isError && <Message message={message} status={isError} />}
         {isLoading && <Loader />}
         <span className="text-4xl m-2">LOGIN</span>
         <Input

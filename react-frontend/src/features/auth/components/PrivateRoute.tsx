@@ -8,17 +8,17 @@ const PrivateRoute = ({ page }: { page: JSX.Element }) => {
     (state) => state.auth
   );
 
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  // console.log("isAuthenticated", isAuthenticated);
-  // console.log("isSuccess", isSuccess);
-  // console.log("jwt", jwt);
+  console.log("isAuthenticated", isAuthenticated);
+  console.log("isSuccess", isSuccess);
+  console.log("jwt", jwt);
 
-  // useEffect(() => {
-  //   if (!jwt || !jwt?.token) return;
-  // console.log("jwt", jwt);
-  //   dispatch(verifyJwt(jwt.token));
-  // }, [jwt, isSuccess]);
+  useEffect(() => {
+    if (!jwt || !jwt?.token) return;
+    console.log("jwt", jwt);
+    dispatch(verifyJwt(jwt.token));
+  }, [jwt, isSuccess]);
 
   return jwt ? page : <Navigate replace to="/login" />;
 };

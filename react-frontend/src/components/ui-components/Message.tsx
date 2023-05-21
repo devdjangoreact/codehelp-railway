@@ -1,6 +1,6 @@
 import React from "react";
 
-function Message() {
+function Message({ message, status }: any) {
   return (
     <div
       role="alert"
@@ -26,12 +26,10 @@ function Message() {
 
         <div className="flex-1">
           <strong className="block font-medium text-gray-900">
-            Changes saved{" "}
+            {status ? "Error" : "Success"}
           </strong>
 
-          <p className="mt-1 text-sm text-gray-700">
-            Your product changes have been saved.
-          </p>
+          <p className="mt-1 text-sm text-gray-700">{message}</p>
         </div>
 
         <button className="text-gray-500 transition hover:text-gray-600">
