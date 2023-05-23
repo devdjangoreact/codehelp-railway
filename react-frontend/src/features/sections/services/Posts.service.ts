@@ -35,6 +35,7 @@ const updatePost = async (
 const createPost = async (
   form: FormConnect
 ): Promise<{ post: PostGet | undefined }> => {
+  console.log(form);
   const response = await axios.post(
     `${process.env.REACT_APP_BASE_API}/posts/`,
     form,

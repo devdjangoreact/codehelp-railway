@@ -28,7 +28,7 @@ const getCategory = async (slug: string | undefined) => {
 
 const getCategorySlug = async (slug: string | undefined) => {
   const response = await axios.get<CategoryGet | null>(
-    `${process.env.REACT_APP_BASE_API}/categoryslug/${slug}`,
+    `${process.env.REACT_APP_BASE_API}/categoryslug/${slug}/`,
     config
   );
   return response;

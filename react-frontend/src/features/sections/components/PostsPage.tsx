@@ -25,8 +25,6 @@ const PostsPage = () => {
 
   const [categoryId, setCategoryId] = useState<string | undefined>("");
 
-  // const { isError, isLoading, Posts } = useAppSelector((state) => state.post);
-
   useEffect(() => {
     if (categoryId !== params.slug) {
       dispatch(getPosts(String(params.slug)));

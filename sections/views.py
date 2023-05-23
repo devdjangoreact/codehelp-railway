@@ -10,9 +10,10 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.utils.decorators import method_decorator
 
 from .models import Category, Post, HashTag
-from .serializers import CategorySerializer, CategorySerializerDepth , PostSerializer, HashTagSerializer
+from .serializers import CategorySerializer, CategorySerializerDepth, PostSerializer, HashTagSerializer
 
 # from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+
 
 # @method_decorator(csrf_protect, name='dispatch')
 class CategoryList(APIView):
@@ -40,6 +41,7 @@ class CategoryList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # @method_decorator(csrf_protect, name='dispatch')
 class CategoryListDepth(APIView):
     permission_classes = [AllowAny]
@@ -61,7 +63,8 @@ class CategoryDetailSlug(APIView):
         else:
             serializer = CategorySerializer(category).data
 
-        return Response(serializer)   
+        return Response(serializer)
+
 
 # @method_decorator(csrf_protect, name='dispatch')
 class CategoryDetail(APIView):
@@ -75,7 +78,6 @@ class CategoryDetail(APIView):
         category = self.get_object(pk)
         serializer = CategorySerializer(category)
         return Response(serializer.data)
-
 
     @swagger_auto_schema(
         request_body=openapi.Schema(
@@ -100,6 +102,7 @@ class CategoryDetail(APIView):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 # @method_decorator(csrf_protect, name='dispatch')
 class PostCategory(APIView):
     permission_classes = [AllowAny]
@@ -107,10 +110,11 @@ class PostCategory(APIView):
     def get(self, request, pk, format=None):
         category_id = Category.objects.filter(slug=pk).first()
         posts = Post.objects.filter(category=category_id)
-        
+
         serializer = PostSerializer(posts, many=True)
-        
+
         return Response(serializer.data)
+
 
 # @method_decorator(csrf_protect, name='dispatch')
 class PostList(APIView):
@@ -133,11 +137,13 @@ class PostList(APIView):
         )
     )
     def post(self, request, format=None):
+        print(request.data)
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # @method_decorator(csrf_protect, name='dispatch')
 class PostDetail(APIView):
@@ -176,6 +182,7 @@ class PostDetail(APIView):
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 # @method_decorator(csrf_protect, name='dispatch')
 class HashTagList(APIView):
     permission_classes = [AllowAny]
@@ -200,6 +207,7 @@ class HashTagList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # @method_decorator(csrf_protect, name='dispatch')
 class HashTagDetail(APIView):
@@ -235,4 +243,3 @@ class HashTagDetail(APIView):
         hashtag = self.get_object(pk)
         hashtag.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-

@@ -43,8 +43,8 @@ const Scrollspy = ({ categorys }: Props) => {
   console.log(categorySlug);
 
   useEffect(() => {
+    dispatch(getCategorySlug(String(params.slug)));
     dispatch(getPosts(String(params.slug)));
-    // dispatch(getCategorySlug(String(params.slug)));
   }, [
     dispatch,
     updateSuccessPost,

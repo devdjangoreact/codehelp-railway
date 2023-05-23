@@ -1,7 +1,7 @@
 __pycache__
 env
 venv
-# *.sqlite3
+*.sqlite3
 mediafiles
 staticfiles
 # /frontend
@@ -173,3 +173,4 @@ __pycache
 .env.staging.db
 .env.prod.proxy-companion
 .env.staging.proxy-companion
+db.sqlite3
