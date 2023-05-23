@@ -3,24 +3,18 @@ import { config } from "../../auth/CSRFToken";
 import { CategoryGet, FormConnect } from "../models/Category.interface";
 
 const getCategorys = async () => {
-  const response = await axios.get<CategoryGet[]>(
-    `${process.env.REACT_APP_BASE_API}/category/`,
-    config
-  );
+  const response = await axios.get<CategoryGet[]>(`/category/`, config);
   return response;
 };
 
 const getCategoryDepth = async () => {
-  const response = await axios.get<CategoryGet[]>(
-    `${process.env.REACT_APP_BASE_API}/categorydepth/`,
-    config
-  );
+  const response = await axios.get<CategoryGet[]>(`/categorydepth/`, config);
   return response;
 };
 
 const getCategory = async (slug: string | undefined) => {
   const response = await axios.get<CategoryGet | null>(
-    `${process.env.REACT_APP_BASE_API}/category/${slug}`,
+    `/category/${slug}`,
     config
   );
   return response;
@@ -28,7 +22,7 @@ const getCategory = async (slug: string | undefined) => {
 
 const getCategorySlug = async (slug: string | undefined) => {
   const response = await axios.get<CategoryGet | null>(
-    `${process.env.REACT_APP_BASE_API}/categoryslug/${slug}`,
+    `/categoryslug/${slug}`,
     config
   );
   return response;
@@ -37,29 +31,21 @@ const getCategorySlug = async (slug: string | undefined) => {
 const updateCategory = async (
   form: FormConnect
 ): Promise<{ category: CategoryGet | null }> => {
-  const response = await axios.put(
-    `${process.env.REACT_APP_BASE_API}/category/${form["id"]}/`,
-    form,
-    config
-  );
+  const response = await axios.put(`/category/${form["id"]}/`, form, config);
   return response.data;
 };
 
 const createCategory = async (
   form: FormConnect
 ): Promise<{ category: CategoryGet | null }> => {
-  const response = await axios.post(
-    `${process.env.REACT_APP_BASE_API}/category/`,
-    form,
-    config
-  );
+  const response = await axios.post(`/category/`, form, config);
   console.log(form);
   return response.data;
 };
 
 const deleteCategory = async (id: string | undefined) => {
   const response = await axios.delete(
-    `${process.env.REACT_APP_BASE_API}/category/${id}`,
+    `/category/${id}`,
 
     config
   );

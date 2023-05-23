@@ -18,10 +18,7 @@ const register = async (
   message: string;
   status: string;
 }> => {
-  const response = await axios.post(
-    `${process.env.REACT_APP_BASE_API}/auth/register`,
-    newUser
-  );
+  const response = await axios.post(`/auth/register`, newUser);
 
   if (response.data) {
     if (response.data.status === "error") {
@@ -65,10 +62,7 @@ const login = async (
   message: string;
   status: string;
 }> => {
-  const response = await axios.post(
-    `${process.env.REACT_APP_BASE_API}/auth/login`,
-    user
-  );
+  const response = await axios.post(`/auth/login`, user);
   console.log(response.data);
   if (response.data) {
     if (response.data.status === "error") {
@@ -105,7 +99,9 @@ const login = async (
   };
 };
 
-const logout = (): void => {
+const logout = async () => {
+  const response = await axios.post(`/logout`);
+  console.log(response.data);
   localStorage.removeItem("user");
   localStorage.removeItem("jwt");
   Cookies.remove("csrftoken");
@@ -114,7 +110,7 @@ const logout = (): void => {
 
 const verifyJwt = async (token: string): Promise<boolean> => {
   const response = await axios.post(
-    `${process.env.REACT_APP_BASE_API}/auth/token/verify/`,
+    `/auth/token/verify/`,
     { token }
     // config
   );

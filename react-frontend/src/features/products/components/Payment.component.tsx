@@ -46,7 +46,7 @@ const PaymentComponent = () => {
   //   setIsProcessing(true);
 
   //   try {
-  //     const res = await axios.post(`${process.env.REACT_APP_BASE_API}/stripe`, {
+  //     const res = await axios.post(`/stripe`, {
   //       cart,
   //     });
 

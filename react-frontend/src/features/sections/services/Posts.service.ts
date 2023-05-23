@@ -5,7 +5,7 @@ import { config } from "../../auth/CSRFToken";
 
 const getPosts = async (categorySlug: string) => {
   const response = await axios.get<PostGet[]>(
-    `${process.env.REACT_APP_BASE_API}/${categorySlug}/posts/`,
+    `/${categorySlug}/posts/`,
     config
   );
 
@@ -13,9 +13,7 @@ const getPosts = async (categorySlug: string) => {
 };
 
 const getPost = async (id: string | undefined) => {
-  const response = await axios.get<PostGet>(
-    `${process.env.REACT_APP_BASE_API}/post/${id}/`
-  );
+  const response = await axios.get<PostGet>(`/post/${id}/`);
 
   return response;
 };
@@ -23,11 +21,7 @@ const getPost = async (id: string | undefined) => {
 const updatePost = async (
   form: FormConnect
 ): Promise<{ post: PostGet | undefined }> => {
-  const response = await axios.put(
-    `${process.env.REACT_APP_BASE_API}/post/${form["id"]}/`,
-    form,
-    config
-  );
+  const response = await axios.put(`/post/${form["id"]}/`, form, config);
 
   return response.data;
 };
@@ -35,18 +29,14 @@ const updatePost = async (
 const createPost = async (
   form: FormConnect
 ): Promise<{ post: PostGet | undefined }> => {
-  const response = await axios.post(
-    `${process.env.REACT_APP_BASE_API}/posts/`,
-    form,
-    config
-  );
+  const response = await axios.post(`/posts/`, form, config);
 
   return response.data;
 };
 
 const deletePost = async (id: string | undefined) => {
   const response = await axios.delete(
-    `${process.env.REACT_APP_BASE_API}/post/${id}/`,
+    `/post/${id}/`,
 
     config
   );

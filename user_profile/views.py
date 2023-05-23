@@ -129,7 +129,7 @@ class SignupView(APIView):
             return Response({"message": "Passwords do not match", "user": None, "status": "error"})
 
 
-@method_decorator(csrf_protect, name="dispatch")
+# @method_decorator(csrf_protect, name="dispatch")
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -164,7 +164,7 @@ class LoginView(APIView):
             data["accessToken"] = str(refresh.access_token)
 
             user_profile = UserProfile.objects.filter(user=user).first()
-            print(data)
+            print(user_profile)
             if user_profile:
                 user_profileSerializer = UserProfileSerializer(user_profile)
 
@@ -178,6 +178,7 @@ class LoginView(APIView):
             return Response({"message": "User not found", "user": None, "status": "error"})
 
 
+@method_decorator(ensure_csrf_cookie, name="dispatch")
 class LogoutView(APIView):
     def post(self, request, format=None):
         try:
