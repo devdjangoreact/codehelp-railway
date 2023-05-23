@@ -42,19 +42,17 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(reset());
-      clearForm();
-    }
-  }, [isAuthenticated, dispatch]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     dispatch(reset());
+  //     clearForm();
+  //   }
+  // }, [isAuthenticated, dispatch]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
     navigate("/");
-  }, [isAuthenticated]);
-
-  console.log("isAuthenticated", isAuthenticated);
+  }, [isAuthenticated, dispatch]);
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,53 +67,52 @@ const Login = () => {
   };
 
   return (
-    <form
-      className="h-screen flex flex-col justify-center items-center bg-blue-50"
-      onSubmit={onSubmitHandler}
-    >
-      <CSRFToken />
-      <div
-        className="flex flex-col justify-center items-center border-4
-       border-amber-300 py-20 p-8 mb-40 rounded-lg bg-orange-50"
-      >
+    <div className="h-screen flex flex-col justify-center items-center bg-blue-50">
+      <form onSubmit={onSubmitHandler}>
+        <CSRFToken />
         {isError && <Message message={message} status={isError} />}
         {isLoading && <Loader />}
-        <span className="text-4xl m-2">LOGIN</span>
-        <Input
-          className="text-xl m-2 w-96"
-          placeholder="email"
-          type="text"
-          value={username}
-          onChange={emailChangeHandler}
-        />
-        <Input
-          className="text-xl m-2 w-96"
-          placeholder="password"
-          value={password}
-          type="password"
-          onChange={passwordChangeHandler}
-        />
-        <div className="m-2 w-96 flex justify-start ">
-          <button
-            className="text-lg m-2 w-48 text-blue-600 bg-orange-200"
-            type="submit"
-          >
-            Sign In
-          </button>
-          <label className="text-lg pl-8 m-2 w-64 ">
-            <p>
-              New Customer?
-              <Link
-                className="text-xl m-2 w-64 text-center text-blue-600"
-                to={"/register"}
-              >
-                Register
-              </Link>
-            </p>
-          </label>
+        <div
+          className="flex flex-col justify-center items-center border-4
+       border-amber-300 py-20 p-8 mb-40 rounded-lg bg-orange-50"
+        >
+          <span className="text-4xl m-2">LOGIN</span>
+          <Input
+            className="text-xl m-2 w-96"
+            placeholder="email"
+            type="text"
+            value={username}
+            onChange={emailChangeHandler}
+          />
+          <Input
+            className="text-xl m-2 w-96"
+            placeholder="password"
+            value={password}
+            type="password"
+            onChange={passwordChangeHandler}
+          />
+          <div className="m-2 w-96 flex justify-start ">
+            <button
+              className="text-lg m-2 w-48 text-blue-600 bg-orange-200"
+              type="submit"
+            >
+              Sign In
+            </button>
+            <label className="text-lg pl-8 m-2 w-64 ">
+              <p>
+                New Customer?
+                <Link
+                  className="text-xl m-2 w-64 text-center text-blue-600"
+                  to={"/register"}
+                >
+                  Register
+                </Link>
+              </p>
+            </label>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 

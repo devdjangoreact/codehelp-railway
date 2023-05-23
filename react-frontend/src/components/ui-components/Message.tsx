@@ -4,9 +4,9 @@ function Message({ message, status }: any) {
   return (
     <div
       role="alert"
-      className="rounded-xl border border-gray-100 p-4 shadow-xl"
+      className="w-auto mb-2 rounded-xl border border-gray-100 p-4 shadow-xl"
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-center gap-4">
         <span className="text-green-600">
           <svg
             xmlns="http://www.w3.org/2000/svg"

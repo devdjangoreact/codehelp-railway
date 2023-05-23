@@ -4,7 +4,11 @@ import "react-sortable-tree/style.css";
 import Router from "./router/Router";
 
 const App = () => {
-  return <Router />;
+  return (
+    <Suspense>
+      <Router />
+    </Suspense>
+  );
 };
 
 export default App;

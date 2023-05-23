@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { ProductDocument } from '../models/Product';
+import { ProductDocument } from "../models/Product";
 
 const getProducts = async () => {
   const response = await axios.get<ProductDocument[]>(

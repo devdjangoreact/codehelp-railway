@@ -22,7 +22,7 @@ const register = async (
     `${process.env.REACT_APP_BASE_API}/auth/register`,
     newUser
   );
-  console.log(response.data);
+
   if (response.data) {
     if (response.data.status === "error") {
       return {
@@ -69,7 +69,7 @@ const login = async (
     `${process.env.REACT_APP_BASE_API}/auth/login`,
     user
   );
-
+  console.log(response.data);
   if (response.data) {
     if (response.data.status === "error") {
       return {
@@ -81,15 +81,15 @@ const login = async (
     } else {
       localStorage.setItem(
         "jwt",
-        JSON.stringify({ token: response.data.token })
+        JSON.stringify({ token: response.data.user.accessToken })
       );
 
-      const decodedJwt: DecodedJwt = jwt_decode(response.data.token);
+      const decodedJwt: DecodedJwt = jwt_decode(response.data.user.accessToken);
 
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
       return {
-        jwt: response.data,
+        jwt: response.data.user.accessToken,
         user: decodedJwt.user,
         message: response.data.message,
         status: response.data.status,
@@ -118,7 +118,7 @@ const verifyJwt = async (token: string): Promise<boolean> => {
     { token }
     // config
   );
-
+  console.log(response.data);
   if (response.data) {
     // const jwtExpirationMs = response.data.exp * 1000;
     // return jwtExpirationMs > Date.now();

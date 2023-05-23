@@ -17,7 +17,11 @@ const CSRFToken = () => {
   useEffect(() => {
     const CsrfToken = async () => {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_API}/auth/csrf_cookie`
+        `${
+          process.env.REACT_APP_ONE_PRODUCTION === "false"
+            ? process.env.REACT_APP_BASE_API
+            : ""
+        }/auth/csrf_cookie`
       );
       return response.data;
     };

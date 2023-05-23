@@ -69,9 +69,13 @@ const Registration: FC = () => {
     if (isAuthenticated) {
       dispatch(reset());
       clearForm();
-      navigate("/");
     }
   }, [isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    navigate("/");
+  }, [isAuthenticated]);
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -105,69 +109,67 @@ const Registration: FC = () => {
   console.log(auth);
 
   return (
-    <form
-      className="h-screen flex flex-col justify-center items-center  bg-blue-50"
-      onSubmit={onSubmitHandler}
-    >
-      <CSRFToken />
-      <div
-        className="flex flex-col justify-center items-center border-4 
-       bg-orange-50 border-amber-300 py-16 p-4 mb-40 rounded-lg"
-      >
+    <div className="h-screen flex flex-col justify-center items-center  bg-blue-50">
+      <form onSubmit={onSubmitHandler}>
+        <CSRFToken />
         {message && <Message message={message} status={isError} />}
-
         {isLoading && <Loader />}
-        <span className="text-4xl m-2">Register</span>
-        <Input
-          className="text-xl m-2 w-96"
-          placeholder="Name"
-          onChange={nameChangeHandler}
-          type="text"
-          value={username}
-        />
-        <Input
-          className="text-xl m-2 w-96"
-          placeholder="email"
-          onChange={emailChangeHandler}
-          type="email"
-          value={email}
-        />
+        <div
+          className="flex flex-col justify-center items-center border-4 
+       bg-orange-50 border-amber-300 py-16 p-4 mb-40 rounded-lg"
+        >
+          <span className="text-4xl m-2">Register</span>
+          <Input
+            className="text-xl m-2 w-96"
+            placeholder="Name"
+            onChange={nameChangeHandler}
+            type="text"
+            value={username}
+          />
+          <Input
+            className="text-xl m-2 w-96"
+            placeholder="email"
+            onChange={emailChangeHandler}
+            type="email"
+            value={email}
+          />
 
-        <Input
-          className="text-xl m-2 w-96"
-          placeholder="password"
-          onChange={passwordChangeHandler}
-          type="password"
-          value={password}
-        />
-        <Input
-          className="text-xl m-2 w-96"
-          placeholder="confirm password"
-          onChange={confirmPasswordChangeHandler}
-          type="password"
-          value={re_password}
-        />
-        <div className=" m-2 w-96 flex justify-start ">
-          <button
-            className="text-lg m-2 w-48 text-blue-600 bg-orange-200"
-            type="submit"
-          >
-            Sign In
-          </button>
-          <label className="text-lg pl-8 m-2 w-64 ">
-            <p>
-              Have an Account?
-              <Link
-                className="text-xl m-2 w-64 text-center text-blue-600"
-                to={"/login"}
-              >
-                Login
-              </Link>
-            </p>
-          </label>
+          <Input
+            className="text-xl m-2 w-96"
+            placeholder="password"
+            onChange={passwordChangeHandler}
+            type="password"
+            value={password}
+          />
+          <Input
+            className="text-xl m-2 w-96"
+            placeholder="confirm password"
+            onChange={confirmPasswordChangeHandler}
+            type="password"
+            value={re_password}
+          />
+          <div className=" m-2 w-96 flex justify-start ">
+            <button
+              className="text-lg m-2 w-48 text-blue-600 bg-orange-200"
+              type="submit"
+            >
+              Sign In
+            </button>
+            <label className="text-lg pl-8 m-2 w-64 ">
+              <p>
+                Have an Account?
+                <Link
+                  className="text-xl m-2 w-64 text-center text-blue-600"
+                  to={"/login"}
+                >
+                  Login
+                </Link>
+              </p>
+            </label>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 

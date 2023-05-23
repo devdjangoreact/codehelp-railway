@@ -101,11 +101,13 @@ class SignupView(APIView):
         username = data["username"]
         password = data["password"]
         re_password = data["re_password"]
-        email = data["email"]
+        email = data["email"].lower()
 
         if password == re_password:
             if User.objects.filter(username=username).exists():
                 return Response({"message": "Username already exists", "user": None, "status": "error"})
+            elif User.objects.filter(email=email).exists():
+                return Response({"message": "Email already exists", "user": None, "status": "error"})
             else:
                 if len(password) < 6:
                     return Response(
@@ -127,7 +129,7 @@ class SignupView(APIView):
             return Response({"message": "Passwords do not match", "user": None, "status": "error"})
 
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name="dispatch")
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -147,6 +149,10 @@ class LoginView(APIView):
         password = data["password"]
 
         user = auth.authenticate(username=username, password=password)
+        print(username)
+        if user == None:
+            username = User.objects.get(email=username.lower())
+            user = auth.authenticate(username=username, password=password)
 
         if user is not None:
             auth.login(request, user)
@@ -158,7 +164,7 @@ class LoginView(APIView):
             data["accessToken"] = str(refresh.access_token)
 
             user_profile = UserProfile.objects.filter(user=user).first()
-
+            print(data)
             if user_profile:
                 user_profileSerializer = UserProfileSerializer(user_profile)
 

@@ -5,7 +5,7 @@ import { useRoutes, Navigate } from "react-router-dom";
 import Layout from "../layouts/Layout";
 
 // ** Router imports
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 
 // ** GetRoutes
 import { getRoutes } from "./routes";
@@ -36,8 +36,20 @@ import {
   MainComponents,
   ChildComponents,
 } from "../features/components/components";
+import { useAppSelector } from "../hooks/redux";
+import { useAppDispatch } from "../hooks/redux/hooks";
+import { verifyJwt } from "../features/auth/authSlice";
 
 const Router = () => {
+  const { isAuthenticated, jwt } = useAppSelector((state) => state.auth);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!jwt || !jwt?.token) return;
+    dispatch(verifyJwt(jwt.token));
+  }, [isAuthenticated]);
+
   const routes = useRoutes([
     {
       path: "/login",
@@ -50,54 +62,57 @@ const Router = () => {
 
     {
       path: "/",
-      element: <Layout />,
+      element: isAuthenticated ? <Layout /> : <Navigate replace to="/login" />,
       errorElement: <ErrorPage />,
+      // children: [
+      //   {
+      //     path: "/",
+      //     errorElement: <ErrorPage />,
+      //     element: <PrivateRoute />,
       children: [
+        { index: true, element: <DashBoard /> },
+        { path: "dashboard", element: <DashBoard /> },
+
         {
-          path: "/",
-          errorElement: <ErrorPage />,
-          element: <PrivateRoute />,
+          path: "github",
           children: [
-            { index: true, element: <PrivateRoute page={<DashBoard />} /> },
-            { path: "dashboard", element: <DashBoard /> },
-
             {
-              path: "github",
-              children: [
-                { index: true, element: <GitSearchPage /> },
-                { path: "favourites", element: <GitFavouritesPage /> },
-              ],
+              index: true,
+              element: <GitSearchPage />,
             },
-
-            {
-              path: ":slug_mini",
-              children: [
-                { index: true, element: <CategoryPage /> },
-                {
-                  path: ":slug",
-                  children: [
-                    { index: true, element: <PostsPage /> },
-                    {
-                      path: "post",
-                      element: <PostsPage />,
-                    },
-                  ],
-                },
-                { path: ":categoryId/edit", element: <EditCategoryPost /> },
-                { path: "create", element: <EditCategoryPost /> },
-              ],
-            },
-
-            // {
-            //   path: "components",
-            //   children: [
-            //     { index: true, element: <MainComponents /> },
-            //     { path: "scrollspy", element: <ChildComponents /> },
-            //   ],
-            // },
+            { path: "favourites", element: <GitFavouritesPage /> },
           ],
         },
+
+        {
+          path: ":slug_mini",
+          children: [
+            { index: true, element: <CategoryPage /> },
+            {
+              path: ":slug",
+              children: [
+                { index: true, element: <PostsPage /> },
+                {
+                  path: "post",
+                  element: <PostsPage />,
+                },
+              ],
+            },
+            { path: ":categoryId/edit", element: <EditCategoryPost /> },
+            { path: "create", element: <EditCategoryPost /> },
+          ],
+        },
+
+        // {
+        //   path: "components",
+        //   children: [
+        //     { index: true, element: <MainComponents /> },
+        //     { path: "scrollspy", element: <ChildComponents /> },
+        //   ],
+        // },
       ],
+      //   },
+      // ],
     },
 
     // ...allRoutes,
