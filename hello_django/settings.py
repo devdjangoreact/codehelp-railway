@@ -59,6 +59,14 @@ INSTALLED_APPS = [
 DBBACKUP_STORAGE = "django.core.files.storage.FileSystemStorage"
 DBBACKUP_STORAGE_OPTIONS = {"location": os.path.join(BASE_DIR, "backup")}
 
+DBBACKUP_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DBBACKUP_STORAGE_OPTIONS = {
+    "access_key": os.environ.get("AWS_S3_ACCESS_KEY_ID"),
+    "secret_key": os.environ.get("AWS_S3_SECRET_ACCESS_KEY"),
+    "bucket_name": os.environ.get("AWS_STORAGE_BUCKET_NAME"),
+    "default_acl": "public",
+}
+
 if not DEBUG:
     SECURE_HSTS_SECONDS = 3600
     SECURE_CONTENT_TYPE_NOSNIFF = True

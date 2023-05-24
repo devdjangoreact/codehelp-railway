@@ -12,3 +12,5 @@ django-cors-headers==3.13.0
 apscheduler==3.9.1
 django-dbbackup==4.0.2
 mega.py==1.0.8
+django-storages[boto3]
+python-decouple==3.8
